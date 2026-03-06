@@ -1,0 +1,42 @@
+name: Daily PM Agent - 自动任务生成
+
+on:
+  schedule:
+    # 每天 UTC 00:00 执行 (北京时间 08:00)
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 允许手动触发测试
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  generate-daily-task:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout 代码
+        uses: actions/checkout@v4
+      
+      - name: 设置 Python 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 安装依赖
+        run: |
+          pip install requests
+      
+      - name: 执行 PM Agent
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/pm_agent_init.py
+      
+      - name: 通知执行结果
+        if: always()
+        run: |
+          echo "PM Agent 执行完成，请检查 Issues 面板"
