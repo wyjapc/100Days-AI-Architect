@@ -15,7 +15,7 @@
 ## 快速开始
 
 1. 配置环境变量（在 GitHub Secrets 中设置）：
-   - `OPENAI_API_KEY` 或 `ANTHROPIC_API_KEY`
+   - `DEEPSEEK_API_KEY`（推荐）、`OPENAI_API_KEY` 或 `ANTHROPIC_API_KEY`
    - `GH_TOKEN` (GitHub Personal Access Token)
 
 2. 系统将每天自动创建当日任务 Issue

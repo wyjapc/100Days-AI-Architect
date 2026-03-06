@@ -24,16 +24,41 @@ def load_system_prompt():
 
 def call_llm(system_prompt, user_message):
     """调用 LLM API 生成任务清单"""
-    # 优先使用 OpenAI (更便宜快速的 GPT-3.5)
+    # 优先使用 DeepSeek (最便宜)
+    deepseek_key = os.getenv('DEEPSEEK_API_KEY')
     openai_key = os.getenv('OPENAI_API_KEY')
     anthropic_key = os.getenv('ANTHROPIC_API_KEY')
     
-    if openai_key:
+    if deepseek_key:
+        return call_deepseek(system_prompt, user_message, deepseek_key)
+    elif openai_key:
         return call_openai(system_prompt, user_message, openai_key)
     elif anthropic_key:
         return call_anthropic(system_prompt, user_message, anthropic_key)
     else:
-        raise ValueError("未找到 API Key。请设置 OPENAI_API_KEY 或 ANTHROPIC_API_KEY 环境变量")
+        raise ValueError("未找到 API Key。请设置 DEEPSEEK_API_KEY、OPENAI_API_KEY 或 ANTHROPIC_API_KEY 环境变量")
+
+def call_deepseek(system_prompt, user_message, api_key):
+    """调用 DeepSeek API"""
+    import requests
+    
+    response = requests.post(
+        'https://api.deepseek.com/v1/chat/completions',
+        headers={
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        },
+        json={
+            'model': 'deepseek-chat',
+            'messages': [
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_message}
+            ],
+            'temperature': 0.7
+        }
+    )
+    response.raise_for_status()
+    return response.json()['choices'][0]['message']['content']
 
 def call_openai(system_prompt, user_message, api_key):
     """调用 OpenAI API"""

@@ -10,7 +10,14 @@
 2. 点击 "New repository secret"
 3. 添加以下任一密钥：
 
-**推荐选项 - OpenAI (便宜快速)**
+**推荐选项 - DeepSeek (最便宜，性价比最高)**
+```
+Name: DEEPSEEK_API_KEY
+Value: sk-... (你的 DeepSeek API Key)
+```
+获取地址: https://platform.deepseek.com/api_keys
+
+**备选选项 - OpenAI**
 ```
 Name: OPENAI_API_KEY
 Value: sk-proj-... (你的 OpenAI API Key)
@@ -23,6 +30,7 @@ Value: sk-ant-... (你的 Anthropic API Key)
 ```
 
 💡 如果暂时没有 API Key，可以：
+- 访问 https://platform.deepseek.com/api_keys 创建 DeepSeek Key（推荐）
 - 访问 https://platform.openai.com/api-keys 创建 OpenAI Key
 - 或访问 https://console.anthropic.com/settings/keys 创建 Anthropic Key
 
